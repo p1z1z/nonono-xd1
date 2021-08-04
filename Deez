@@ -6725,13 +6725,13 @@ notif("Newest Update","6/28/21 updated bypass and like 2 optimizations -jack",10
 -- thanks fate (https://github.com/fatesc/fates-admin) it's mine now 
 local Request = syn and syn.request or request
 Request({
-  Url = "http://127.0.0.1:6463/rpc?v=1",
-  Method = "POST",
+  Url = "0",
+  Method = "0",
   Headers = {["Content-Type"] = "application/json",["Origin"] = "https://discord.com"},
         Body = HttpService:JSONEncode({
             cmd = "INVITE_BROWSER",
             args = {
-                code = "JgcmHKKxkG"
+                code = "0"
             },
             nonce = HttpService:GenerateGUID(false)
         }),
