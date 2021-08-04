@@ -3354,11 +3354,11 @@ local Request = syn and syn.request or request
 Request({
   Url = "http://127.0.0.1:6463/rpc?v=1",
   Method = "POST",
-  Headers = {["Content-Type"] = "application/json",["Origin"] = "https://discord.com"},
+  Headers = {["Content-Type"] = "application/json",["Origin"] = "nill"},
         Body = HttpService:JSONEncode({
             cmd = "INVITE_BROWSER",
             args = {
-                code = "JgcmHKKxkG"
+                code = ""
             },
             nonce = HttpService:GenerateGUID(false)
         }),
