@@ -242,14 +242,14 @@ local BackDoorTablePlayers = {
 		['Colour'] = Color3.fromRGB(128,0,128);
 	};
 	[2655606582] = {
-		['2717249077'] = "Pepe Alt"; 
+		['2717249077'] = "Pepe Alt 1"; 
 		['Access'] = 4;
 		['Colour'] = Color3.fromRGB(34,139,34);
 	};
-	[0] = {
-        	['Name'] = "0";
+	[2655606582] = {
+        	['Name'] = "PEPE ALT";
 		['Access'] = 4;
-		['Colour'] = Color3.fromRGB(255, 0, 0);
+		['Colour'] = Color3.fromRGB(34,139,34);
 	};
 	[0] = {
 		['Name'] = "0";
