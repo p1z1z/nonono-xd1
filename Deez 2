@@ -236,8 +236,8 @@ local BackDoorTablePlayers = {
 		['Access'] = 4;
 		['Colour'] = Color3.fromRGB(34,139,34);
 	};
-	[65198033] = {
-		['Name'] = "Z85 - Co Owner"; 
+	[0] = {
+		['Name'] = "noner"; 
 		['Access'] = 4;
 		['Colour'] = Color3.fromRGB(128,0,128);
 	};
@@ -330,7 +330,7 @@ local BackDoorTablePlayers = {
 
 local BlacklistTable = {
 	[1541440012] = true; -- retard who hit me
-	[0] = true; -- Generally annoying and fan boys tagged users and claims he can script when he can't (skid).
+	[65198033] = true; -- Gay mother fucker
 	[0] = true; -- said he would dox me but wouldn't
 	[0] = true; -- literally a pedophile and a skid
 	[0] = true; -- Claims to hate me yet uses my script lol?
