@@ -330,7 +330,7 @@ local BackDoorTablePlayers = {
 
 local BlacklistTable = {
 	[1541440012] = true; -- retard who hit me
-	[0] = true; -- Gay mother fucker
+	[418286412] = true; -- Stomp him whenever you see him
 	[0] = true; -- said he would dox me but wouldn't
 	[0] = true; -- literally a pedophile and a skid
 	[0] = true; -- Claims to hate me yet uses my script lol?
