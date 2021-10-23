@@ -1,0 +1,65 @@
+local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/wally-rblx/uwuware-ui/main/main.lua"))() -- thanks for the loadstring wally.
+
+local combat = require(game:GetService("ReplicatedStorage").Shared.Combat) -- combat module
+local drops = require(game:GetService("ReplicatedStorage").Shared.Drops) -- drops module
+local skills = require(game:GetService("ReplicatedStorage").Shared.Skills)
+
+local item_drops = getupvalue(drops.Start, 4) -- dropped items table
+local spend_key = getfenv(combat.ValidateTargets).SpendKey -- Spendkey func
+
+local class = workspace.Characters[game.Players.LocalPlayer.Name].Properties.Class.Value
+
+local skill_count = 0
+
+repeat task.wait() until class -- prob not needed, just to be sure tho.
+
+-- epic, while true do end!
+for _, v in next, getconnections(combat:GetAttackEvent().OnClientEvent) do
+    v:Disable()
+end
+
+-- this prob isn't correct, whatever.
+for _, v in next, skills[class] do
+    skill_count = skill_count + 1
+    v.Cooldown = 0 -- held on server i think
+end
+
+-- [[ AUTO LOOT ]] --
+game:GetService("RunService").Heartbeat:connect(function()
+    if next(item_drops) and library.flags["auto_loot"] then
+        for i, v in next, item_drops do
+            v.model:Destroy() -- delete model
+            v.followPart:Destroy() -- delete followpart (pet shit)
+            game:GetService("ReplicatedStorage").Shared.Drops.CoinEvent:FireServer(v.id) -- remote
+            table.remove(item_drops, i) -- remove the part from the table after
+        end
+    end
+end)
+
+-- [[ KILL AURA ]] --
+coroutine.wrap(function()
+    while task.wait(library.flags["killaura_delay"]) do
+        if library.flags["kill_aura_enabled"] then
+            -- change the max distance or else u might get kicked.
+            local mob, position = combat:GetInRadius(game.Players.LocalPlayer.Character.HumanoidRootPart.Position, 20, library.flags["killaura_dist"], nil, nil, game.Players.LocalPlayer.Character)
+            if #mob > 0 then
+                for i = 1, skill_count do
+                    -- could use attacktargets for this also
+                    game:GetService("ReplicatedStorage").Shared.Combat.AttackTarget:FireServer(mob, position, class .. i, spend_key(), time())
+                end
+            end
+        end
+    end
+end)()
+
+-- [[ LIBRARY ]] --
+local window = library:CreateWindow("World Zero") do
+    local folder = window:AddFolder("Kill Aura") do
+        folder:AddToggle({text = "Enabled", value = false, flag = "kill_aura_enabled"})
+        folder:AddSlider({text = "Delay", min = 0, max = 5, value = 0.3, float = 0.1, flag = "killaura_delay"})
+        folder:AddSlider({text = "Max Distance", min = 0, max = 200, value = 50, flag = "killaura_dist"})
+        folder:AddToggle({text = "Auto Loot", value = false, flag = "auto_loot"})
+    end
+end
+
+library:Init()
