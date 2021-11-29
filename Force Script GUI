@@ -1,0 +1,124 @@
+ToggleKey = Enum.KeyCode.F5
+
+ScrapTrinket = true
+Ingredients = true
+ClickArtifact = false
+
+Success = pcall(function()click_detector(Instance.new("ClickDetector"),10)end)
+Success2 = pcall(function()fireclickdetector(Instance.new("ClickDetector"))end)
+Exploit = Success and 2 or (Success2 and 1 or 0)
+
+local MainParent = game.CoreGui
+
+local TrinketEsp = {Trinket = {}}
+TrinketEsp.Visible = true
+TrinketEsp.CommonVisible = true
+
+TrinketEsp.Init = function(part,name,rare,rainbow)
+if not TrinketEsp.Trinket[part] then
+local BillboardUi = Instance.new("BillboardGui")
+BillboardUi.AlwaysOnTop = true
+BillboardUi.Size = UDim2.new(3,60,1,30)
+BillboardUi.ZIndexBehavior = Enum.ZIndexBehavior.Global
+BillboardUi.StudsOffsetWorldSpace = Vector3.new(0,0,0)
+BillboardUi.Adornee = part
+
+local PlayerName = Instance.new("TextLabel",BillboardUi)
+PlayerName.BackgroundTransparency = 1
+pcall(function() PlayerName.TextColor3 = name == "Scroll" and Color3.new(1,1,0) or part.Color end)
+PlayerName.Size = UDim2.new(1,0,.3,0)
+PlayerName.AnchorPoint = Vector2.new(0,.5)
+PlayerName.Position = UDim2.new(0,0,.2,0)
+PlayerName.ZIndex = 2
+PlayerName.Text = name
+PlayerName.TextScaled = true
+PlayerName.TextStrokeTransparency = .5
+PlayerName.Font = Enum.Font.GothamBold
+PlayerName.TextStrokeColor3 = Color3.fromRGB(33, 33, 33)
+
+local Distance = PlayerName:Clone()
+Distance.Parent = BillboardUi
+Distance.Font = Enum.Font.Gotham
+Distance.TextColor3 = Color3.new(1,1,1)
+Distance.Position = UDim2.new(0,0,.5,0)
+TrinketEsp.Trinket[part] = {BillboardUi,PlayerName,Distance,rainbow,rare}
+end
+end
+
+Grabbed = {}
+TrinketEsp.Render = function()
+for i,v in pairs(TrinketEsp.Trinket) do
+pcall(function()
+local Visible = TrinketEsp.Visible and (TrinketEsp.CommonVisible or v[5])
+v[1].Size = UDim2.new(3,60*1.2,1,30*1.2)
+v[1].Parent = Visible and game.workspace.Terrain or nil
+v[1].Adornee = Visible and i or nil
+v[3].Text = math.floor(((game.Workspace.CurrentCamera.CFrame.p) - i.Position).Magnitude+.5)
+v[2].Visible = Visible
+v[3].Visible = Visible
+if v[4] then
+v[2].TextColor3 = Color3.fromHSV((tick()*.5)%1,.8,1)
+end
+end)
+if not i or i.Parent == nil then
+v[1]:Destroy()
+TrinketEsp.Trinket[i] = nil
+elseif not Grabbed[i] or tick() > Grabbed[i] then
+if v[7] and (not v[4] or ClickArtifact) and (Exploit == 1 or Exploit == 2)then
+if ((game.Players.LocalPlayer.Character.PrimaryPart.Position) - i.Position).Magnitude < Click.MaxActivationDistance then
+if Exploit == 2 then
+click_detector(v[5],((game.Players.LocalPlayer.Character.PrimaryPart.Position) - i.Position).Magnitude)
+elseif Exploit == 1 then
+fireclickdetector(v[5],((game.Players.LocalPlayer.Character.PrimaryPart.Position) - i.Position).Magnitude)
+end
+Grabbed[i] = tick() + .1
+end
+end
+end
+end
+end
+
+
+TrinketEsp.GetId = function(rbxasset)
+return tonumber(string.split(rbxasset,"%")[1]:gsub("%D+", "") or 0) or 0
+end
+
+TrinketEsp.CompareColors = function(color,color2)
+return math.floor(color.r*255) == math.floor(color2.r*255) and math.floor(color.g*255) == math.floor(color2.g*255) and math.floor(color.b*255) == math.floor(color2.b*255)
+end
+
+TrinketEsp.CheckInstance = function(instance)
+if workspace:FindFirstChild("Scraps") and workspace:FindFirstChild("Ingredients") and instance:IsA("ClickDetector") and instance.Name ~= "NPClick" then
+if ScrapTrinket and instance:IsDescendantOf(workspace.Scraps) then
+TrinketEsp.Init(instance.Parent,instance.Parent.Parent.Name,false)
+elseif Ingredients and instance:IsDescendantOf(workspace.Ingredients) then
+TrinketEsp.Init(instance.Parent,instance.Parent.Parent.Name,false)
+end
+end
+end
+
+for i,v in pairs(game.Workspace:GetDescendants()) do
+TrinketEsp.CheckInstance(v)
+end
+game.Workspace.DescendantAdded:Connect(function(v)
+TrinketEsp.CheckInstance(v)
+end)
+
+game.Workspace.DescendantRemoving:Connect(function(v)
+if TrinketEsp.Trinket[v] then
+TrinketEsp.Trinket[v][1]:Destroy()
+TrinketEsp.Trinket[v] = nil
+end
+end)
+
+game:GetService("UserInputService").InputBegan:connect(function(inputObject)
+if inputObject.KeyCode == ToggleKey then
+TrinketEsp.Visible = not TrinketEsp.Visible
+end
+end)
+
+
+
+game:GetService("RunService").RenderStepped:Connect(function()
+TrinketEsp.Render()
+end)
